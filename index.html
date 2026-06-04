@@ -252,6 +252,7 @@
     <div class="nav-item" data-phase="6"><span class="nav-num">6</span>Confirmation</div>
     <div class="nav-item" data-phase="7"><span class="nav-num">7</span>Objections</div>
     <div class="nav-item" data-phase="8"><span class="nav-num">8</span>Checklist</div>
+    <div class="nav-item" data-phase="9"><span class="nav-num">9</span>Pricing Sheet</div>
 
     <button class="theme-toggle" id="themeToggle" type="button">
       <span class="ico" id="themeIco">🌙</span>
@@ -272,6 +273,7 @@
     <div class="nav-item" data-phase="6"><span class="nav-num">6</span></div>
     <div class="nav-item" data-phase="7"><span class="nav-num">7</span></div>
     <div class="nav-item" data-phase="8"><span class="nav-num">8</span></div>
+    <div class="nav-item" data-phase="9"><span class="nav-num">9</span></div>
   </div>
 
   <!-- ============ SCRIPT PANEL ============ -->
@@ -279,7 +281,7 @@
 
     <div class="header-bar">
       <h1>AT&T Winback</h1>
-      <div class="sub">Sales Script · Cold Outbound · Business Internet &amp; Phone</div>
+      <div class="sub">Sales Script · Cold Outbound · Business Fiber · June Promo</div>
       <span class="warn-pill">⚠ Fill ALL required fields before submitting. No field should be left empty.</span>
     </div>
 
@@ -289,21 +291,19 @@
       <div class="phase-sub">Phase 1 · Reach the person who handles the Internet account</div>
 
       <div class="qf">
-        <h3>📋 Product Quick Facts — Know Before You Dial</h3>
+        <h3>📋 Cheat Sheet — Know Before You Dial</h3>
         <ul>
-          <li><b>Selling:</b> AT&amp;T Business Internet &amp; Phone — brand new offer in their area</li>
-          <li><b>Speeds:</b> 1Gig×1Gig · 300Mb×300Mb · 100Mb×100Mb — price <b>$___ /mo</b> <span style="color:var(--yellow)">(TBD — confirm with AT&amp;T)</span></li>
-          <li><b>No contract · No termination fees · No overage charges</b></li>
-          <li>Fastest business package — switch made in <b>5 business days</b></li>
-          <li>Dedicated AT&amp;T customer service &amp; support team</li>
-          <li>Install: <b>$99 full tech install</b> — refunded after <b>3 on-time payments</b></li>
-          <li>Add-ons: <b>Wireless Internet Backup $15/mo</b> OR <b>5 Static IPs for $15</b></li>
-          <li>Target: <b>Cold outbound</b> to local businesses (Google Maps lists)</li>
+          <li><b>Selling:</b> AT&amp;T Business Fiber (winback / switch)</li>
+          <li><b>🔥 JUNE PROMO (ends 6/30) — reward card by speed:</b> 300M → <b>$300</b> · 500M → <b>$400</b> · 1G/2G/5G → <b>$500</b></li>
+          <li><b>FREE install</b> · <b>No contract</b> · <b>ETF buyout up to $750</b> if switching</li>
+          <li><b>Price (approx):</b> 300M ~$60 · 500M ~$100 · 1G ~$140 — as low as <b>~$30</b> converged w/ wireless</li>
+          <li><b>1Gig+ includes 5G backup</b> · Add-ons: Phone $15/line · Dynamic Defense from $15/mo</li>
+          <li><span style="color:var(--yellow)">⚠ Confirm exact price by address in the AT&amp;T portal before quoting.</span></li>
         </ul>
       </div>
 
       <div class="tag say">Say</div>
-      <div class="say-line">Hi, this is <b>[AGENT NAME]</b> calling on behalf of <b>AT&amp;T Business Internet and Phone Services</b>.</div>
+      <div class="say-line">Hi, this is <b>[AGENT NAME]</b> calling on behalf of <b>AT&amp;T Business Fiber</b>.</div>
 
       <div class="tag ask">Ask · Gatekeeper</div>
       <div class="ask-line">I'm trying to reach the person who handles your <b>Internet account</b> — are they available?</div>
@@ -315,52 +315,41 @@
 
     <!-- ===== PHASE 2: PITCH ===== -->
     <section class="phase" data-phase="2">
-      <h2 class="phase-head">The Pitch — Business Internet &amp; Phone</h2>
-      <div class="phase-sub">Phase 2 · New offer + speed comparison + key differentiators</div>
+      <h2 class="phase-head">The Pitch</h2>
+      <div class="phase-sub">Phase 2 · Offer + reward card. Keep it short — let them talk.</div>
 
-      <div class="tag say">Say</div>
-      <div class="say-line">We wanted to give you this important information on our <b>brand new offer for business internet and phone service</b> in this area.</div>
+      <div class="tag say">Say · Hook</div>
+      <div class="say-line">We've got a limited-time offer on <b>AT&amp;T Business Fiber</b> in your area — faster speed, lower price, <b>no contract</b>, and a <b>cash reward card</b> just for switching. And it ends <b>June 30th</b>.</div>
 
-      <div class="tag say">Say · Comparison</div>
-      <div class="say-line">Let me give you a quick comparison — we offer:<br>
-        • <b>1 Gig × 1 Gig</b> for <b>$___ /mo</b><br>
-        • <b>300 Mb × 300 Mb</b> for <b>$___ /mo</b><br>
-        • <b>100 Mb × 100 Mb</b> for <b>$___ /mo</b></div>
+      <div class="tag say">Say · Speed + Reward (pick the tier that fits them)</div>
+      <div class="say-line">
+        • <b>300 Mbps</b> → ~$60/mo · <b>$300 reward card</b><br>
+        • <b>500 Mbps</b> → ~$100/mo · <b>$400 reward card</b><br>
+        • <b>1 Gig</b> → ~$140/mo · <b>$500 reward card</b> · incl. 5G backup<br>
+        <span style="color:var(--muted)">Add AT&amp;T Business Wireless and fiber drops as low as ~$30/mo.</span></div>
 
-      <div class="tag say">Say · Differentiators</div>
-      <div class="say-line">There's <b>no contract, no termination fees, and no overage charges</b>. This is our <b>fastest business package</b>, and we can make the change in just <b>5 business days</b> for you.</div>
+      <div class="tag say">Say · The Money Line</div>
+      <div class="say-line">That reward card basically covers your <b>first 3–4 months free</b>. Plus <b>free install</b>, and if you're under contract elsewhere we'll buy it out <b>up to $750</b>. There's really no reason not to come back to AT&amp;T.</div>
 
-      <div class="tag say">Say · Support</div>
-      <div class="say-line">The offer includes <b>dedicated customer service and support</b> — AT&amp;T built this team of professionals to give small and mid-sized businesses like yours the best possible care.</div>
-
-      <div class="tip-box"><b>TIP:</b> Lead with the speed tier that fits their business size. Let "<b>faster, lower price, no contract</b>" land before you ask for the approval in Phase 3.</div>
+      <div class="tip-box"><b>TIP:</b> Always say <b>price + reward card together</b>: "500 Meg is about $100/mo AND you get $400 back." The card is your #1 hook. You can add <b>Phone for Business at $15/line</b> if they need voice.</div>
     </section>
 
     <!-- ===== PHASE 3: SOFT CLOSE + ADD-ONS ===== -->
     <section class="phase" data-phase="3">
       <h2 class="phase-head">Soft Close &amp; Add-Ons</h2>
-      <div class="phase-sub">Phase 3 · Get approval + book the tech + offer backup / static IPs</div>
+      <div class="phase-sub">Phase 3 · Assume the sale — book the install</div>
 
       <div class="tag ask">Ask · Soft Close</div>
-      <div class="ask-line">All we need is your <b>approval</b> so we can replace your current circuit with a faster one at a lower price. What would be the <b>best time</b> for a technician to come to your business?</div>
+      <div class="ask-line">All I need is your <b>OK to get you set up</b> at that lower price with the reward card. What day works best for the technician to come out?</div>
 
-      <div class="tip-box"><b>TIP:</b> This is an assumptive close — ask for the install time, not "do you want it." If they hesitate or object → go to Phase 7 (Objections), then come back here.</div>
+      <div class="tip-box"><b>TIP:</b> Assumptive close — ask <b>when</b>, not <b>if</b>. If they hesitate → Phase 7 (Objections), then come back.</div>
 
-      <div class="tag say">Say · Add-On Offer</div>
-      <div class="say-line">One last thing — I'd also recommend <b>AT&amp;T Wireless Internet Backup for only $15/mo</b>, <b>or 5 Static IPs for $15 more</b>.</div>
-
-      <div class="tag ask">Ask</div>
-      <div class="ask-line">Would you like to add the <b>Wireless Internet Backup</b> or the <b>Static IPs</b>?</div>
+      <div class="tag say">Say · Add-Ons (optional)</div>
+      <div class="say-line">Want me to add <b>Phone for Business</b> at $15/line, or <b>Dynamic Defense</b> security (starts at $15/mo, often 2 months free)? Up to you.</div>
 
       <div class="branches">
-        <div class="branch yes">
-          <span class="lbl">IF YES</span>
-          Confirm which add-on (Backup $15/mo OR 5 Static IPs $15) and log it in the form panel. Then continue to Phase 4 (Order Details).
-        </div>
-        <div class="branch no">
-          <span class="lbl">IF NO</span>
-          No problem — mark "No" on both add-ons in the form and continue to Phase 4 (Order Details).
-        </div>
+        <div class="branch yes"><span class="lbl">IF YES</span>Confirm the add-on and log it in the form. Continue to Phase 4.</div>
+        <div class="branch no"><span class="lbl">IF NO</span>No problem — continue to Phase 4.</div>
       </div>
     </section>
 
@@ -382,10 +371,9 @@
         <li><b>Secondary contact phone number</b> (used at time of install)?</li>
         <li>What is the <b>full service address</b>?</li>
         <li>What is the <b>best time to reach you</b>?</li>
-        <li>Which <b>speed</b> would you like? (1Gig / 300Mb / 100Mb)</li>
-        <li><b>Static IP addresses</b> requested?</li>
-        <li><b>Internet Backup</b> requested?</li>
-        <li>What is your <b>EIN</b>? That's your tax ID number — it identifies your business in our system.</li>
+        <li>Which <b>speed</b> would you like? (300M / 500M / 1Gig / 2Gig / 5Gig)</li>
+        <li>Adding <b>Phone for Business</b> or <b>Dynamic Defense</b>?</li>
+        <li>What is your <b>EIN</b>? That's your tax ID — it identifies your business in our system.</li>
       </ol>
 
       <div class="tip-box"><b>TIP:</b> Capture each answer in the form panel on the right as you go. Do NOT wait until the end of the call — type as the customer speaks.</div>
@@ -396,21 +384,18 @@
       <h2 class="phase-head">Recap &amp; Compliance Disclosure</h2>
       <div class="phase-sub">Phase 5 · Required disclosure — read clearly, do not rush</div>
 
-      <div class="compliance"><b>READ WORD-FOR-WORD.</b> Do not paraphrase. AT&amp;T's regulatory and legal disclosure requirements depend on the exact wording below.</div>
+      <div class="compliance"><b>READ CLEARLY.</b> Confirm the key terms so there are no surprises and the sale holds.</div>
 
       <div class="tag say">Say · Recap</div>
-      <div class="say-line">Let me recap: we'll replace your current circuit as a <b>new order</b> with <b>[SPEED]</b> at a lower price of <b>$[PRICE] /mo</b>.</div>
+      <div class="say-line">Let me recap: you're getting <b>AT&amp;T Business Fiber [SPEED]</b> at <b>$[PRICE]/mo</b>, with a <b>$[CARD] reward card</b>, <b>free install</b>, and <b>no contract</b>.</div>
 
-      <div class="tag say">Say · Install Fee</div>
-      <div class="say-line">There is a <b>$99 fee</b> for a full tech install. This is <b>refunded in 3 months</b> — once you pay on time for the 3 months, this is a standard refund.</div>
+      <div class="tag say">Say · Reward Card Redemption</div>
+      <div class="say-line">Important on the reward card: you'll get a <b>postcard mailed to your billing address</b> — you <b>must complete the redemption</b> with it to receive the card. It arrives a few weeks after activation.</div>
 
-      <div class="tag say">Say · No Surprises</div>
-      <div class="say-line">At the time of your installation, the technician will inform you of any additional wiring or charges <b>before</b> beginning your installation, if any — so there are no surprises. We do <b>guarantee service</b> once it is in and working.</div>
+      <div class="tag say">Say · Install Access</div>
+      <div class="say-line">The technician will confirm any extra wiring <b>before</b> starting — no surprises. Someone <b>18 or older</b> must be on site with access to where the service goes in. Service is guaranteed once it's working.</div>
 
-      <div class="tag say">Say · Access Requirement</div>
-      <div class="say-line">You, or someone you designate who is <b>18 years of age or older</b>, must be present during the entire install and provide <b>"free and ready" access</b> to any outlet where service will be installed.</div>
-
-      <div class="warn">Confirm the EIN / Tax ID has been captured before moving on. If not, ask for it now.</div>
+      <div class="warn">Confirm EIN / Tax ID is captured before moving on. If switching, note the ETF buyout (up to $750) needs their final bill from the old carrier.</div>
     </section>
 
     <!-- ===== PHASE 6: CONFIRMATION ===== -->
@@ -446,6 +431,7 @@
           <tr><td>"This sounds too good to be true — what's the catch?"</td><td>No catch: <b>no contract, no termination fees, faster speed, lower price</b>. The only fee is the $99 full tech install, and that's <b>fully refunded after 3 on-time payments</b>.</td></tr>
           <tr><td>"I don't want a technician at my business."</td><td>The install is quick, and the tech will tell you about any extra wiring or charges <b>before</b> starting — no surprises. You just need someone 18 or older on site with access, and we schedule it at your convenience within 5 business days.</td></tr>
           <tr><td>"I need to check with my partner / IT person."</td><td>Absolutely — who handles that, and what's the best number? I can also send the Letter of Authorization so they can review the exact terms. Let's pencil in a quick callback so you don't lose today's pricing.</td></tr>
+          <tr><td>"Let me think about it / call me later."</td><td>I understand — but this reward card promo <b>ends June 30th</b>. The $400–$500 card, free install, and ETF buyout are the strongest offers of the year and they go away after the 30th. Let's at least lock in your eligibility today so you don't lose it — it only takes a couple minutes.</td></tr>
           <tr><td>"How much exactly?"</td><td>Pricing depends on the speed you choose and your location. If you confirm your service address, I can give you the <b>exact monthly price</b> for each speed tier right now.</td></tr>
         </tbody>
       </table>
@@ -460,7 +446,7 @@
 
       <ul class="checklist" id="checklist">
         <li><span class="cb">✓</span>Recorded line disclosure stated at start of call</li>
-        <li><span class="cb">✓</span>Agent identified as calling on behalf of AT&amp;T Business Internet &amp; Phone</li>
+        <li><span class="cb">✓</span>Agent identified as calling on behalf of ATAgent identified as calling on behalf of AT&amp;T Business Internet &amp; Phoneamp;T Business Fiber</li>
         <li><span class="cb">✓</span>Confirmed contact handles the Internet account (decision maker)</li>
         <li><span class="cb">✓</span>Verbal authorization captured: customer said YES on recording</li>
         <li><span class="cb">✓</span>Speed and monthly price disclosed and confirmed</li>
@@ -472,6 +458,64 @@
         <li><span class="cb">✓</span>LOA to be emailed; customer to sign and return</li>
         <li><span class="cb">✓</span>All fields completed in the form panel</li>
       </ul>
+    </section>
+
+    <!-- ===== PHASE 9: PRICING SHEET ===== -->
+    <section class="phase" data-phase="9">
+      <h2 class="phase-head">Pricing Reference Sheet</h2>
+      <div class="phase-sub">Phase 9 · Quick reference — approximate pricing (mid-2026)</div>
+
+      <div class="compliance"><b>JUNE PROMO = OFFICIAL (AT&amp;T internal, thru 6/30).</b> The reward cards, free install, and $750 ETF buyout below are confirmed AT&amp;T offers. The speed/price tables are typical reference — still verify the exact monthly price for the customer's address at <b>att.com/business</b> / AT&amp;T portal before quoting.</div>
+
+      <div class="tag say">Business Fiber — Standalone (approx /mo) + June Reward Card</div>
+      <table class="obj">
+        <thead><tr><th>Speed</th><th>Standard</th><th>With Wireless</th><th>Reward Card 💳</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>300 Mbps</td><td>~$60</td><td>~$30–40</td><td><b>$300</b></td><td>Small teams, e-commerce</td></tr>
+          <tr><td>500 Mbps</td><td>~$100</td><td>~$60</td><td><b>$400</b></td><td>More devices, cloud</td></tr>
+          <tr><td>1 Gig</td><td>~$140</td><td>~$90</td><td><b>$500</b></td><td>Heavy use · 5G backup</td></tr>
+          <tr><td>2 Gig</td><td>~$185</td><td>~$135</td><td><b>$500</b></td><td>High-volume · 5G backup</td></tr>
+          <tr><td>5 Gig</td><td>~$285</td><td>~$235</td><td><b>$500</b></td><td>Enterprise · 5G backup</td></tr>
+        </tbody>
+      </table>
+
+      <div class="tag say">Internet + Phone Bundles (approx /mo)</div>
+      <table class="obj">
+        <thead><tr><th>Bundle</th><th>Price</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Fiber 300 + Phone</td><td>~$85</td><td>1 line · +$50 reward card (online)</td></tr>
+          <tr><td>Fiber 500 + Phone</td><td>~$125</td><td>—</td></tr>
+          <tr><td>Fiber 1 Gig + Phone</td><td>~$175</td><td>Includes 5G backup</td></tr>
+          <tr><td>Phone for Business</td><td>$15/line</td><td>Up to 6 lines bundled · unlimited US/CA/MX</td></tr>
+        </tbody>
+      </table>
+
+      <div class="tag say">Dynamic Defense (security add-on, /mo)</div>
+      <table class="obj">
+        <thead><tr><th>Tier</th><th>Price</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Standard</td><td>$15 (sometimes $0 w/ promo)</td><td>Threat blocking, DNS protection</td></tr>
+          <tr><td>Advanced</td><td>$65</td><td>Firewall, geo/web filtering · often 2 mo free</td></tr>
+          <tr><td>Premium</td><td>$95</td><td>Antivirus, zero-day defense · often 2 mo free</td></tr>
+        </tbody>
+      </table>
+
+      <div class="qf">
+        <h3>🔥 JUNE PROMO (effective 6/4–6/30) — Speed-Based Reward Cards</h3>
+        <ul>
+          <li><b>NEW reward cards replace the old $300 offer — new customers only:</b></li>
+          <li>ABF <b>300M</b> → <b>$300</b> reward card</li>
+          <li>ABF <b>500M</b> → <b>$400</b> reward card</li>
+          <li>ABF <b>1G / 2G / 5G</b> → <b>$500</b> reward card</li>
+          <li><b>Position it as free months:</b> e.g. 1 Gig + $500 card = <b>~3 months free</b> (taxes/fees excluded)</li>
+          <li><b>$99 install fee WAIVED</b> across all speeds</li>
+          <li><b>Up to $750 ETF buyout</b> — removes switching barrier for customers under contract</li>
+          <li>Fiber <b>as low as $30/mo when converged</b> (with AT&amp;T Business Wireless)</li>
+          <li>⚠ Customer <b>MUST complete redemption</b> using the postcard mailed to their billing address — required to receive the reward card</li>
+        </ul>
+      </div>
+
+      <div class="warn">All prices exclude taxes &amp; fees. Promos auto-renew at regular rate unless canceled. Availability limited to fiber-served areas — verify the address.</div>
     </section>
 
     <!-- Phase nav buttons -->
@@ -533,9 +577,11 @@
           <div class="field"><label>Speed Sold <span class="req">*</span></label>
             <select name="speed" required>
               <option value="">— Select —</option>
-              <option value="1Gig x 1Gig">1Gig × 1Gig</option>
-              <option value="300Mb x 300Mb">300Mb × 300Mb</option>
-              <option value="100Mb x 100Mb">100Mb × 100Mb</option>
+              <option value="300M">300 Mbps (~$60) — $300 card</option>
+              <option value="500M">500 Mbps (~$100) — $400 card</option>
+              <option value="1Gig">1 Gig (~$140) — $500 card</option>
+              <option value="2Gig">2 Gig (~$185) — $500 card</option>
+              <option value="5Gig">5 Gig (~$285) — $500 card</option>
             </select>
           </div>
           <div class="field"><label>Monthly Price ($/mo) <span class="req">*</span></label><input name="monthly_price" required><div class="hint">Enter the confirmed AT&T price for the speed sold.</div></div>
@@ -642,12 +688,12 @@ function goToPhase(p){
   navItems.forEach(n => n.classList.toggle('active', n.dataset.phase == p));
   document.querySelector('.script').scrollTop = 0;
   document.getElementById('prevBtn').disabled = (p == 1);
-  document.getElementById('nextBtn').disabled = (p == 8);
+  document.getElementById('nextBtn').disabled = (p == 9);
 }
 
 navItems.forEach(n => n.addEventListener('click', () => goToPhase(n.dataset.phase)));
 document.getElementById('prevBtn').addEventListener('click', () => { if(currentPhase > 1) goToPhase(currentPhase - 1); });
-document.getElementById('nextBtn').addEventListener('click', () => { if(currentPhase < 8) goToPhase(parseInt(currentPhase) + 1); });
+document.getElementById('nextBtn').addEventListener('click', () => { if(currentPhase < 9) goToPhase(parseInt(currentPhase) + 1); });
 
 /* ============ CHECKLIST ============ */
 document.querySelectorAll('#checklist li').forEach(li => {
