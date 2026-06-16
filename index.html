@@ -3,286 +3,734 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AT&T Business Fiber — Agent Script (Simple)</title>
+<title>AT&T Winback — IPTECH SV</title>
 <style>
-  :root{
-    --att-blue:#003A70; --att-light:#009FDB; --att-orange:#E87722;
-    --bg:#0a0e1a; --panel:#10162a; --line:#1f2746;
-    --text:#e6ecff; --strong:#ffffff; --muted:#8a93b4;
-    --say-bg:#0d2138; --say-border:#009FDB;
-    --ask-bg:#1a1430; --ask-border:#a855f7;
-    --warn-bg:#3b2410; --warn-border:#E87722;
-    --comp-bg:#3a1414; --comp-border:#ef4444;
-    --yes-bg:#0f2e1f; --yes-border:#22c55e;
-    --no-bg:#3a1414; --no-border:#ef4444;
+  /* ============ THEME ============ */
+  :root, [data-theme="dark"]{
+    --att-blue:#003A70;
+    --att-light:#009FDB;
+    --att-orange:#E87722;
+    --bg:#0a0e1a;
+    --panel:#10162a;
+    --panel2:#161d36;
+    --line:#1f2746;
+    --text:#e6ecff;
+    --text-strong:#ffffff;
+    --muted:#8a93b4;
+    --green:#22c55e;
+    --red:#ef4444;
+    --yellow:#f59e0b;
+    --say-bg:#0d1f3a;
+    --say-text:#dbe6ff;
+    --say-border:#009FDB;
+    --ask-bg:#1a1430;
+    --ask-text:#e6dbff;
+    --ask-border:#a855f7;
+    --warn-bg:#3b2410;
+    --warn-text:#ffd9b8;
+    --warn-border:#E87722;
+    --compliance-bg:#3a1414;
+    --compliance-text:#ffd1d1;
+    --compliance-border:#ef4444;
+    --branch-yes:#0f2e1f;
+    --branch-yes-border:#22c55e;
+    --branch-no:#3a1414;
+    --branch-no-border:#ef4444;
+    --header-text:#ffffff;
+    --shadow:0 4px 12px rgba(0,159,219,0.3);
+  }
+
+  [data-theme="light"]{
+    --att-blue:#003A70;
+    --att-light:#009FDB;
+    --att-orange:#E87722;
+    --bg:#f5f7fb;
+    --panel:#ffffff;
+    --panel2:#f0f3f9;
+    --line:#dde3ee;
+    --text:#1a2138;
+    --text-strong:#0a0e1a;
+    --muted:#6b7488;
+    --green:#16a34a;
+    --red:#dc2626;
+    --yellow:#d97706;
+    --say-bg:#e6f3fc;
+    --say-text:#0d2a4a;
+    --say-border:#009FDB;
+    --ask-bg:#f3ebff;
+    --ask-text:#3a1d6e;
+    --ask-border:#9333ea;
+    --warn-bg:#fef3e6;
+    --warn-text:#7c3a06;
+    --warn-border:#E87722;
+    --compliance-bg:#fde8e8;
+    --compliance-text:#7a1414;
+    --compliance-border:#dc2626;
+    --branch-yes:#e6f7ec;
+    --branch-yes-border:#16a34a;
+    --branch-no:#fde8e8;
+    --branch-no-border:#dc2626;
+    --header-text:#0a0e1a;
+    --shadow:0 4px 12px rgba(0,58,112,0.15);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);
-       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-       font-size:16px;line-height:1.55;padding-bottom:60px}
-  .wrap{max-width:760px;margin:0 auto;padding:0 16px}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.5}
+  a{color:var(--att-light);text-decoration:none}
 
-  header{background:linear-gradient(135deg,var(--att-blue),var(--att-light));
-         padding:18px 16px;position:sticky;top:0;z-index:10;
-         box-shadow:0 2px 10px rgba(0,0,0,.4)}
-  header h1{margin:0;color:#fff;font-size:19px;font-weight:800}
-  header p{margin:3px 0 0;color:#dbeeff;font-size:12.5px}
-  .nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .nav a{background:rgba(255,255,255,.15);color:#fff;font-size:11px;
-         font-weight:700;padding:4px 9px;border-radius:5px;text-decoration:none}
-  .nav a:hover{background:rgba(255,255,255,.3)}
+  /* ============ LAYOUT ============ */
+  .app{display:grid;grid-template-columns:240px 1fr 420px;height:100vh;overflow:hidden}
+  @media (max-width:1200px){.app{grid-template-columns:200px 1fr 380px}}
+  @media (max-width:980px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;height:auto}}
 
-  .rule{background:var(--warn-bg);border:1px solid var(--warn-border);
-        border-radius:8px;padding:12px 14px;margin:16px 0;font-size:13.5px;color:#ffd9b8}
-  .rule b{color:#fff}
+  /* ============ SIDEBAR ============ */
+  .sidebar{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:18px 14px}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .brand-logo{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--att-blue),var(--att-light));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px}
+  .brand-text{font-weight:700;font-size:15px;color:var(--text-strong)}
+  .brand-sub{font-size:11px;color:var(--muted);margin-bottom:18px}
+  .nav-title{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:14px 6px 8px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text);border:1px solid transparent;margin-bottom:3px;transition:all 0.15s}
+  .nav-item:hover{background:var(--panel2);border-color:var(--line)}
+  .nav-item.active{background:linear-gradient(90deg,rgba(0,159,219,0.15),transparent);border-color:var(--att-light);color:var(--text-strong)}
+  .nav-num{width:24px;height:24px;border-radius:50%;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--att-light);flex-shrink:0}
+  .nav-item.active .nav-num{background:var(--att-light);color:#fff}
+  .sidebar-foot{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);text-align:center}
 
-  .step{background:var(--panel);border:1px solid var(--line);
-        border-radius:10px;padding:16px;margin:14px 0}
-  .step .num{display:inline-block;background:var(--att-light);color:#001;
-        font-weight:800;font-size:12px;padding:3px 10px;border-radius:5px;margin-bottom:8px}
-  .step h2{margin:0 0 4px;font-size:17px;color:var(--strong)}
-  .hint{color:var(--muted);font-size:13px;margin:0 0 12px}
+  /* ============ SCRIPT PANEL ============ */
+  .script{overflow-y:auto;padding:24px 32px;background:var(--bg)}
+  @media (max-width:980px){.script{padding:18px}}
 
-  .say{background:var(--say-bg);border-left:4px solid var(--say-border);
-       border-radius:0 8px 8px 0;padding:12px 14px;margin:10px 0;font-size:16px}
-  .say:before{content:"SAY";display:block;font-size:10px;font-weight:800;
-       letter-spacing:1px;color:var(--say-border);margin-bottom:5px}
-  .ask{background:var(--ask-bg);border-left:4px solid var(--ask-border);
-       border-radius:0 8px 8px 0;padding:12px 14px;margin:10px 0;font-size:16px}
-  .ask:before{content:"ASK";display:block;font-size:10px;font-weight:800;
-       letter-spacing:1px;color:#c98bff;margin-bottom:5px}
-  .say b,.ask b{color:#fff}
+  .header-bar{position:sticky;top:0;background:var(--bg);padding:6px 0 14px;margin-bottom:14px;border-bottom:1px solid var(--line);z-index:5}
+  .header-bar h1{margin:0;font-size:22px;font-weight:800;color:var(--text-strong);letter-spacing:-0.5px}
+  .header-bar .sub{font-size:12px;color:var(--muted);margin-top:3px}
+  .warn-pill{display:inline-flex;align-items:center;gap:6px;background:var(--warn-bg);color:var(--warn-text);padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;margin-top:8px;border:1px solid var(--warn-border)}
 
-  .comp{background:var(--comp-bg);border:1px solid var(--comp-border);
-        border-radius:8px;padding:13px 15px;margin:12px 0;color:#ffd1d1;font-size:15px}
-  .comp .tag{font-size:10px;font-weight:800;letter-spacing:1px;color:#ff6b6b;display:block;margin-bottom:5px}
-  .comp b{color:#fff}
+  .phase{display:none;animation:fadeIn 0.2s ease}
+  .phase.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
-  .branches{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
-  @media(max-width:600px){.branches{grid-template-columns:1fr}}
-  .b{padding:12px;border-radius:8px;font-size:13.5px}
-  .b.yes{background:var(--yes-bg);border:1px solid var(--yes-border)}
-  .b.no{background:var(--no-bg);border:1px solid var(--no-border)}
-  .b .l{display:inline-block;font-weight:800;font-size:10px;letter-spacing:1px;
-        padding:2px 8px;border-radius:4px;margin-bottom:7px;color:#fff}
-  .b.yes .l{background:var(--yes-border)}
-  .b.no .l{background:var(--no-border)}
+  .phase-head{margin:0 0 6px;font-size:24px;font-weight:800;color:var(--text-strong)}
+  .phase-sub{color:var(--muted);font-size:13px;margin-bottom:18px}
 
-  .check{margin:8px 0 0;padding-left:0;list-style:none}
-  .check li{padding:5px 0 5px 26px;position:relative;font-size:15px}
-  .check li:before{content:"☐";position:absolute;left:0;color:var(--att-light);font-size:17px}
+  /* Speech tags */
+  .tag{display:inline-block;padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:1px;border-radius:4px;margin-bottom:6px;text-transform:uppercase}
+  .tag.say{background:var(--say-border);color:#fff}
+  .tag.ask{background:var(--ask-border);color:#fff}
+  .tag.transition{background:var(--muted);color:#fff}
+  .tag.tip{background:var(--att-orange);color:#fff}
 
-  .reb{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0}
-  .reb h2{margin:0 0 12px;font-size:17px;color:var(--strong)}
-  .reb .q{font-weight:800;color:var(--att-orange);font-size:14.5px;margin:14px 0 4px}
-  .reb .a{font-size:15px;background:var(--say-bg);border-left:3px solid var(--say-border);
-          padding:9px 12px;border-radius:0 6px 6px 0}
+  /* Script lines */
+  .say-line{background:var(--say-bg);border-left:4px solid var(--say-border);padding:14px 18px;border-radius:0 8px 8px 0;margin:6px 0 16px;font-size:15px;color:var(--say-text)}
+  .ask-line{background:var(--ask-bg);border-left:4px solid var(--ask-border);padding:14px 18px;border-radius:0 8px 8px 0;margin:6px 0 16px;font-size:15px;color:var(--ask-text)}
+  .warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text);padding:10px 14px;border-radius:6px;font-size:13px;margin:12px 0;display:flex;align-items:flex-start;gap:8px}
+  .warn::before{content:"⚠";font-size:16px;line-height:1.2}
+  .compliance{background:var(--compliance-bg);border:1px solid var(--compliance-border);color:var(--compliance-text);padding:12px 16px;border-radius:6px;font-size:13px;margin:14px 0;font-weight:500}
+  .compliance b{color:var(--compliance-border)}
 
-  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px}
-  th{background:var(--att-blue);color:#fff;padding:8px;text-align:left;font-size:12px}
-  td{padding:7px 8px;border-bottom:1px solid var(--line)}
-  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
-  .price b{color:#fff}
-  .card{color:#22c55e;font-weight:800}
+  .tip-box{background:var(--warn-bg);border-left:3px solid var(--att-orange);padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;font-size:13px;color:var(--warn-text)}
+  .tip-box b{color:var(--att-orange)}
+
+  /* Branch boxes (IF YES / IF NO) */
+  .branches{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+  @media (max-width:680px){.branches{grid-template-columns:1fr}}
+  .branch{padding:14px;border-radius:8px;font-size:13px}
+  .branch.yes{background:var(--branch-yes);border:1px solid var(--branch-yes-border)}
+  .branch.no{background:var(--branch-no);border:1px solid var(--branch-no-border)}
+  .branch .lbl{display:inline-block;font-weight:800;font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:4px;margin-bottom:8px}
+  .branch.yes .lbl{background:var(--branch-yes-border);color:#fff}
+  .branch.no .lbl{background:var(--branch-no-border);color:#fff}
+
+  /* Order details list */
+  .order-list{counter-reset:order;list-style:none;padding:0;margin:14px 0}
+  .order-list li{counter-increment:order;position:relative;padding:12px 14px 12px 50px;background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:8px;font-size:14px}
+  .order-list li::before{content:counter(order);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:var(--att-light);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+
+  /* Objections table */
+  table.obj{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  table.obj thead th{background:var(--att-blue);color:#fff;padding:10px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:0.8px}
+  table.obj td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top;font-size:13px;color:var(--text)}
+  table.obj td:first-child{font-weight:600;color:var(--att-light);width:32%}
+
+  /* Quick facts */
+  .qf{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px 0}
+  .qf h3{margin:0 0 10px;font-size:13px;color:var(--att-light);text-transform:uppercase;letter-spacing:1px}
+  .qf ul{margin:0;padding-left:18px;font-size:13px;color:var(--text)}
+  .qf li{margin-bottom:4px}
+
+  /* Checklist */
+  .checklist{list-style:none;padding:0;margin:14px 0}
+  .checklist li{padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-bottom:6px;font-size:13px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:all 0.15s}
+  .checklist li:hover{border-color:var(--att-light)}
+  .checklist li.checked{background:rgba(34,197,94,0.08);border-color:var(--green);text-decoration:line-through;opacity:0.7}
+  .cb{width:18px;height:18px;border:2px solid var(--muted);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:transparent;transition:all 0.15s}
+  .checklist li.checked .cb{background:var(--green);border-color:var(--green);color:#fff}
+
+  /* Phase nav buttons */
+  .phase-nav{display:flex;justify-content:space-between;margin:24px 0 12px;gap:10px}
+  .pbtn{flex:1;padding:10px 14px;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;transition:all 0.15s}
+  .pbtn:hover{border-color:var(--att-light);color:var(--att-light)}
+  .pbtn:disabled{opacity:0.3;cursor:not-allowed}
+
+  /* ============ FORM PANEL ============ */
+  .formpanel{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:20px}
+  .formpanel h2{margin:0 0 4px;font-size:16px;color:var(--text-strong);display:flex;align-items:center;gap:8px}
+  .formpanel .form-sub{color:var(--muted);font-size:12px;margin-bottom:16px}
+  .form-warning{background:var(--compliance-bg);border:1px solid var(--compliance-border);color:var(--compliance-text);padding:9px 12px;border-radius:6px;font-size:12px;margin-bottom:16px;font-weight:500}
+
+  .fgroup{margin-bottom:18px}
+  .fgroup h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--att-light);font-weight:700;border-bottom:1px solid var(--line);padding-bottom:6px}
+
+  .field{margin-bottom:10px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+  .field label .req{color:var(--red);margin-left:2px}
+  .field input,.field textarea,.field select{width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:all 0.15s}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--att-light);background:var(--panel2)}
+  .field textarea{resize:vertical;min-height:60px}
+  .field .hint{font-size:11px;color:var(--muted);margin-top:3px}
+
+  .radio-row{display:flex;gap:8px}
+  .radio-row label{flex:1;display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--bg);border:1px solid var(--line);border-radius:6px;cursor:pointer;font-size:12px;transition:all 0.15s}
+  .radio-row label:hover{border-color:var(--att-light)}
+  .radio-row input{width:auto;margin:0}
+  .radio-row label:has(input:checked){background:rgba(0,159,219,0.1);border-color:var(--att-light)}
+
+  .submit-row{display:flex;gap:8px;margin-top:14px}
+  .btn{padding:11px 16px;border-radius:6px;font-weight:700;cursor:pointer;font-size:13px;border:none;transition:all 0.15s}
+  .btn-primary{background:linear-gradient(135deg,var(--att-blue),var(--att-light));color:#fff;flex:1}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,159,219,0.3)}
+  .btn-primary:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+  .btn-secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+  .btn-secondary:hover{border-color:var(--red);color:var(--red)}
+
+  .success-screen{display:none;text-align:center;padding:40px 20px}
+  .success-screen.active{display:block}
+  .success-screen .check{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 16px}
+  .success-screen h3{margin:0 0 6px;color:var(--text-strong);font-size:18px}
+  .success-screen p{color:var(--muted);font-size:13px;margin-bottom:18px}
+
+  /* Mobile phase pills */
+  .mobile-phases{display:none;overflow-x:auto;gap:6px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+  @media (max-width:980px){.mobile-phases{display:flex}.sidebar{display:none}}
+  .mobile-phases .nav-item{flex-shrink:0;font-size:12px;padding:6px 10px}
+
+  /* Theme toggle */
+  .theme-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;margin-top:16px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:all 0.15s;font-size:12px;color:var(--text);font-weight:600;width:100%}
+  .theme-toggle:hover{border-color:var(--att-light);color:var(--att-light)}
+  .theme-toggle .ico{font-size:16px;line-height:1}
+  .theme-toggle .lbl{flex:1;text-align:left}
+  .theme-toggle .pill{font-size:10px;background:var(--att-light);color:#fff;padding:2px 8px;border-radius:999px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
+
+  /* Scrollbar */
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
-    <h1>AT&amp;T Business Fiber — Agent Script</h1>
-    <p>AT&amp;T Business Fiber Solutions · Simple &amp; direct · Read the blue boxes out loud</p>
-    <div class="nav">
-      <a href="#s1">1 Open</a>
-      <a href="#s2">2 Why</a>
-      <a href="#s3">3 Discover</a>
-      <a href="#s4">4 Offer</a>
-      <a href="#s5">5 Compliance</a>
-      <a href="#s6">6 Close</a>
-      <a href="#s7">7 Details</a>
-      <a href="#s8">8 Recap</a>
-      <a href="#reb">Rebuttals</a>
-      <a href="#price">Pricing</a>
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">WB</div>
+      <div>
+        <div class="brand-text">AT&T Winback</div>
+        <div class="brand-sub">IPTECH SV · V1</div>
+      </div>
     </div>
+
+    <div class="nav-title">📞 Script</div>
+    <div class="nav-item active" data-phase="1"><span class="nav-num">1</span>Opening</div>
+    <div class="nav-item" data-phase="2"><span class="nav-num">2</span>Pitch</div>
+    <div class="nav-item" data-phase="3"><span class="nav-num">3</span>Soft Close</div>
+    <div class="nav-item" data-phase="4"><span class="nav-num">4</span>Order Details</div>
+    <div class="nav-item" data-phase="5"><span class="nav-num">5</span>Recap</div>
+    <div class="nav-item" data-phase="6"><span class="nav-num">6</span>Close</div>
+
+    <div class="nav-title">📚 Reference</div>
+    <div class="nav-item" data-phase="7"><span class="nav-num">7</span>Tips &amp; Rebuttals</div>
+    <div class="nav-item" data-phase="8"><span class="nav-num">8</span>Pricing Sheet</div>
+    <div class="nav-item" data-phase="9"><span class="nav-num">9</span>Checklist</div>
+
+    <button class="theme-toggle" id="themeToggle" type="button">
+      <span class="ico" id="themeIco">🌙</span>
+      <span class="lbl" id="themeLbl">Dark Mode</span>
+      <span class="pill" id="themePill">DARK</span>
+    </button>
+
+    <div class="sidebar-foot">IPTECH SV · Confidential</div>
+  </aside>
+
+  <!-- Mobile horizontal phase nav -->
+  <div class="mobile-phases">
+    <div class="nav-item active" data-phase="1"><span class="nav-num">1</span></div>
+    <div class="nav-item" data-phase="2"><span class="nav-num">2</span></div>
+    <div class="nav-item" data-phase="3"><span class="nav-num">3</span></div>
+    <div class="nav-item" data-phase="4"><span class="nav-num">4</span></div>
+    <div class="nav-item" data-phase="5"><span class="nav-num">5</span></div>
+    <div class="nav-item" data-phase="6"><span class="nav-num">6</span></div>
+    <div class="nav-item" data-phase="7"><span class="nav-num">7</span></div>
+    <div class="nav-item" data-phase="8"><span class="nav-num">8</span></div>
+    <div class="nav-item" data-phase="9"><span class="nav-num">9</span></div>
   </div>
-</header>
 
-<div class="wrap">
+  <!-- ============ SCRIPT PANEL ============ -->
+  <main class="script">
 
-  <div class="rule">
-    <b>GOLDEN RULE:</b> Lead with what THEY save. Never claim they were an AT&amp;T customer —
-    you don't know that. Be the helpful pro who found them a better deal before it expires.
-  </div>
-
-  <!-- STEP 1 -->
-  <div class="step" id="s1">
-    <span class="num">STEP 1</span>
-    <h2>Opening — reach the decision-maker</h2>
-    <p class="hint">Friendly, confident, fast. Get to the owner/manager.</p>
-    <div class="say">Hi, good morning — this is <b>[AGENT]</b> calling from <b>AT&amp;T Business
-      Fiber Solutions</b>. Am I speaking with the <b>owner</b> or whoever handles
-      the <b>internet and phone</b>?</div>
-    <div class="branches">
-      <div class="b yes"><span class="l">IF YES</span>Continue to Step 2.</div>
-      <div class="b no"><span class="l">IF GATEKEEPER</span>"It's about lowering the business's internet and phone bill — the owner will want to hear it. Can you put me through for a minute?"</div>
+    <div class="header-bar">
+      <h1>AT&T Winback</h1>
+      <div class="sub">Sales Script · Cold Outbound · Business Fiber · June Promo</div>
+      <span class="warn-pill">⚠ Fill ALL required fields before submitting. No field should be left empty.</span>
     </div>
-  </div>
 
-  <!-- STEP 2 -->
-  <div class="step" id="s2">
-    <span class="num">STEP 2</span>
-    <h2>Why you're calling — the 5-minute ask</h2>
-    <p class="hint">Lead with their savings. Low pressure. Just ask for 5 minutes.</p>
-    <div class="say">Quick reason for my call — we're helping local businesses <b>lower their internet
-      and phone bill</b>. All I need is about <b>5 minutes</b> to see if we can cut what you're
-      spending. <b>If I can't save you money, I'll let you go</b> — no problem. Fair enough?</div>
-  </div>
+    <!-- ===== PHASE 1: OPENING ===== -->
+    <section class="phase active" data-phase="1">
+      <h2 class="phase-head">Opening</h2>
+      <div class="phase-sub">Phase 1 · Reach the owner/manager, then hook fast</div>
 
-  <!-- STEP 3 -->
-  <div class="step" id="s3">
-    <span class="num">STEP 3</span>
-    <h2>Discover — make it about THEIR savings</h2>
-    <p class="hint">This one question qualifies them AND gives you the savings angle.</p>
-    <div class="ask">Quick question so I don't waste your time — <b>who do you use for internet right
-      now</b>, and roughly <b>what are you paying a month</b>?</div>
-    <div class="branches">
-      <div class="b yes"><span class="l">PAYS A LOT / UNHAPPY</span>Gold. "Perfect — I can almost certainly beat that AND get you a reward card. Let me show you." → Step 4.</div>
-      <div class="b no"><span class="l">HAPPY / CHEAP FIBER</span>"Totally fair." Try the reward-card angle once. If still no → thank them, move to next call. Don't force a bad fit.</div>
+      <div class="tag say">Say</div>
+      <div class="say-line">Hi, good morning — this is <b>[AGENT NAME]</b> calling from <b>AT&amp;T Business Fiber Solutions</b>. May I speak with the <b>owner</b> or whoever handles the <b>internet and phone</b>, please?</div>
+
+      <div class="tag say">Say · The 5-Minute Ask</div>
+      <div class="say-line">Quick reason for my call — we're helping local businesses <b>lower their internet and phone bill</b>. All I need is about <b>5 minutes</b> to see if we can cut what you're spending. <b>If I can't save you money, I'll let you go</b> — no problem. Fair enough?</div>
+
+      <div class="tag say">Say · The Hook</div>
+      <div class="say-line">Right now we've got a <b>limited-time offer</b> on AT&amp;T Business Fiber in your area, since it's now available — <b>faster speed, lower price, no contract</b>, and a <b>cash reward card starting at $300 up to $500</b> just for switching to AT&amp;T Business Fiber. Plus a <b>Free Tech Install</b>. You can also add <b>Phone Service for Business at $15/line</b>.</div>
+
+      <div class="tag say">Say · Urgency</div>
+      <div class="say-line">This is the <b>best offer we have</b> for you — and it <b>ends June 30th</b>. That's why we wanted to talk to you urgently.</div>
+
+      <div class="compliance"><b>COMPLIANCE:</b> State the recorded-line disclosure before continuing. Mandatory.</div>
+    </section>
+
+    <!-- ===== PHASE 2: PITCH ===== -->
+    <section class="phase" data-phase="2">
+      <h2 class="phase-head">The Pitch</h2>
+      <div class="phase-sub">Phase 2 · Speeds + reward card. Pick the tier, let them talk.</div>
+
+      <div class="tag say">Say · Speeds &amp; Reward (pick the tier that fits them)</div>
+      <div class="say-line">Speeds start at:<br>
+        • <b>300 Mbps</b> → ~$70/mo · <b>$300 reward card</b><br>
+        • <b>500 Mbps</b> → ~$110/mo · <b>$400 reward card</b><br>
+        • <b>1 Gig</b> → ~$160/mo · <b>$500 reward card</b> · incl. 5G backup<br>
+        Add AT&amp;T Business Wireless and fiber drops as low as <b>~$30/mo</b>.</div>
+
+      <div class="tag say">Say · The Money Line</div>
+      <div class="say-line">That reward card basically covers your <b>first 3–4 months free</b>. Plus <b>free install</b>, and if you're under contract elsewhere we'll buy it out <b>up to $750</b>. There's really no reason not to come back to AT&amp;T.</div>
+    </section>
+
+    <!-- ===== PHASE 3: SOFT CLOSE + ADD-ONS ===== -->
+    <section class="phase" data-phase="3">
+      <h2 class="phase-head">Soft Close &amp; Add-Ons</h2>
+      <div class="phase-sub">Phase 3 · Assume the sale — book the install</div>
+
+      <div class="tag ask">Ask · Soft Close</div>
+      <div class="ask-line">All I need is your <b>OK to get you set up</b> at that lower price with the reward card. <b>What day works best</b> for the technician to come out?</div>
+
+      <div class="tag ask">Ask · Add-Ons</div>
+      <div class="ask-line">Want me to add <b>Phone for Business at $15/line</b>, or <b>Dynamic Defense</b> internet security (starts at $15/mo, <b>2 months free</b>)?</div>
+
+      <div class="branches">
+        <div class="branch yes"><span class="lbl">IF YES</span>Confirm the add-on and log it in the form. Continue to Phase 4.</div>
+        <div class="branch no"><span class="lbl">IF NO</span>No problem — continue to Phase 4.</div>
+      </div>
+    </section>
+
+    <!-- ===== PHASE 4: ORDER DETAILS ===== -->
+    <section class="phase" data-phase="4">
+      <h2 class="phase-head">Order Details</h2>
+      <div class="phase-sub">Phase 4 · Capture business information — fill the form panel as you go →</div>
+
+      <div class="tag transition">Transition</div>
+      <div class="say-line">Great! To get your order started, I just need to confirm a few quick details about your business.</div>
+
+      <ol class="order-list">
+        <li>Can I get the proper spelling of your <b>first and last name</b>?</li>
+        <li>What is your <b>legal business name</b>?</li>
+        <li>Is your business a <b>Corporation, LLC, or Sole Proprietor</b>?</li>
+        <li>What is the <b>business number</b>?</li>
+        <li>What is the <b>best number to reach you</b> at?</li>
+        <li><b>Secondary contact person</b> (used at time of install)?</li>
+        <li><b>Secondary contact phone number</b> (used at time of install)?</li>
+        <li>What is the <b>full service address</b>?</li>
+        <li>What is the <b>best time to reach you</b>?</li>
+        <li>Which <b>speed</b> would you like? (300M / 500M / 1Gig / 2Gig / 5Gig)</li>
+        <li>Adding <b>Phone for Business</b> or <b>Dynamic Defense</b>?</li>
+        <li>What is your <b>EIN</b>? That's your tax ID — it identifies your business in our system.</li>
+      </ol>
+    </section>
+
+    <!-- ===== PHASE 5: RECAP / COMPLIANCE ===== -->
+    <section class="phase" data-phase="5">
+      <h2 class="phase-head">Recap &amp; Compliance Disclosure</h2>
+      <div class="phase-sub">Phase 5 · Required disclosure — read clearly, do not rush</div>
+
+      <div class="compliance"><b>READ CLEARLY.</b> Confirm the key terms so there are no surprises and the sale holds.</div>
+
+      <div class="tag say">Say · Recap</div>
+      <div class="say-line">Let me recap: you're getting <b>AT&amp;T Business Fiber [SPEED]</b> at <b>$[PRICE]/mo</b>, with a <b>$[CARD] reward card</b>, <b>free install</b>, and <b>no contract</b>.</div>
+
+      <div class="tag say">Say · Reward Card Redemption</div>
+      <div class="say-line">Important on the reward card: you'll get a <b>postcard mailed to your billing address</b> — you <b>must complete the redemption</b> with it to receive the card. It arrives a few weeks after activation.</div>
+
+      <div class="tag say">Say · Install Access</div>
+      <div class="say-line">The technician will confirm any extra wiring <b>before</b> starting — no surprises. Someone <b>18 or older</b> must be on site with access to where the service goes in. Service is guaranteed once it's working.</div>
+
+      <div class="warn">Confirm EIN / Tax ID is captured before moving on. If switching, note the ETF buyout (up to $750) needs their final bill from the old carrier.</div>
+    </section>
+
+    <!-- ===== PHASE 6: CLOSE ===== -->
+    <section class="phase" data-phase="6">
+      <h2 class="phase-head">Close</h2>
+      <div class="phase-sub">Phase 6 · Letter of Authorization + wrap up</div>
+
+      <div class="tag say">Say · Letter of Authorization</div>
+      <div class="say-line">I'm going to email you a <b>Letter of Authorization</b>. Please <b>sign it and email it back</b> so we can finalize your order. (Read the email back to confirm spelling.)</div>
+
+      <div class="tag say">Say · Close</div>
+      <div class="say-line">Welcome back to AT&amp;T, and thank you for your time today. Have a great day!</div>
+
+      <div class="warn">Submit the form on the right. The order is NOT final until the signed LOA comes back — set a follow-up if not received same-day. See the Checklist (page 9) before submitting.</div>
+    </section>
+
+    <!-- ===== PHASE 7: TIPS & REBUTTALS ===== -->
+    <section class="phase" data-phase="7">
+      <h2 class="phase-head">Tips &amp; Rebuttals</h2>
+      <div class="phase-sub">Reference · Pull these up when you need them — not read out loud</div>
+
+      <div class="qf">
+        <h3>⚡ Quick Tips</h3>
+        <ul>
+          <li><b>Say price + reward card together:</b> "500 Meg is ~$110/mo AND you get $400 back." The card is your #1 hook.</li>
+          <li><b>Lead with the speed that fits their size</b> — don't list all tiers, pick one.</li>
+          <li><b>Assumptive close:</b> ask <b>when</b> the tech comes, not <b>if</b> they want it.</li>
+          <li><b>Type as they talk</b> — fill the form panel live, don't wait till the end.</li>
+          <li><b>Use the deadline:</b> the 6/30 reward card is your urgency every call.</li>
+          <li><b>Confirm the email</b> for the LOA — no signed LOA, no sale.</li>
+        </ul>
+      </div>
+
+      <table class="obj">
+        <thead><tr><th>Objection</th><th>Rebuttal</th></tr></thead>
+        <tbody>
+          <tr><td>"I'm under contract with my current provider."</td><td>That's fine — <b>we have no contract and no termination fees</b> on our side, and we can time the switch for when your current term ends. Many businesses save enough on the lower monthly price that it more than covers any early-term cost. Let's lock in today's offer so it's ready when you are.</td></tr>
+          <tr><td>"I'm happy with my current provider."</td><td>Glad it's working for you. The difference is <b>faster speed at a lower price, no contract</b>, AND a <b>$300–$500 reward card</b> just for switching. Worth a couple minutes to cut your bill and pocket the card before it ends 6/30.</td></tr>
+          <tr><td>"Is this really AT&amp;T?"</td><td>Yes — we're an <b>authorized AT&amp;T Solutions Provider</b> for business internet and phone. The order goes directly onto AT&amp;T's network, and you get AT&amp;T billing and AT&amp;T's dedicated business support team.</td></tr>
+          <tr><td>"Just email me the information."</td><td>Happy to email you the Letter of Authorization. But the pricing is <b>location-based</b>, and I can lock in today's offer for you right now in about two minutes — then email the confirmation. What speed fits your business best?</td></tr>
+          <tr><td>"I don't have time right now."</td><td>Completely understand — this only takes a couple of minutes and could lower your monthly bill. When's a better time today for a quick callback so I can hold this offer for you?</td></tr>
+          <tr><td>"I had a bad experience with AT&amp;T before."</td><td>I hear you. This is a <b>dedicated business team</b> built specifically to fix that — a direct support line and no-contract terms, so you're never locked in. If the service ever falls short, you can leave with no termination fee.</td></tr>
+          <tr><td>"This sounds too good to be true — what's the catch?"</td><td>No catch: <b>no contract, no termination fees, free install</b>, faster speed, lower price, plus a <b>$300–$500 reward card</b>. It's AT&amp;T's strongest promo of the year and it ends June 30th.</td></tr>
+          <tr><td>"I don't want a technician at my business."</td><td>The install is quick and <b>free</b>, and the tech tells you about any extra wiring <b>before</b> starting — no surprises. You just need someone 18 or older on site with access, scheduled at your convenience.</td></tr>
+          <tr><td>"I need to check with my partner / IT person."</td><td>Absolutely — who handles that, and what's the best number? I can also send the Letter of Authorization so they can review the exact terms. Let's pencil in a quick callback so you don't lose today's pricing.</td></tr>
+          <tr><td>"Let me think about it / call me later."</td><td>I understand — but this reward card promo <b>ends June 30th</b>. The $400–$500 card, free install, and ETF buyout are the strongest offers of the year and they go away after the 30th. Let's at least lock in your eligibility today so you don't lose it — it only takes a couple minutes.</td></tr>
+          <tr><td>"How much exactly?"</td><td>Pricing depends on the speed you choose and your location. If you confirm your service address, I can give you the <b>exact monthly price</b> for each speed tier right now.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== PHASE 8: CHECKLIST ===== -->
+    <section class="phase" data-phase="9">
+      <h2 class="phase-head">Agent Compliance Checklist</h2>
+      <div class="phase-sub">Reference · Tap each item to verify before submitting the sale</div>
+
+      <div class="compliance"><b>BEFORE SUBMITTING</b> any sale, verify <b>EVERY</b> item below was completed on the recorded line. Sales missing any of these items will be rejected.</div>
+
+      <ul class="checklist" id="checklist">
+        <li><span class="cb">✓</span>Recorded line disclosure stated at start of call</li>
+        <li><span class="cb">✓</span>Identified as calling on behalf of AT&amp;T Business Fiber</li>
+        <li><span class="cb">✓</span>Reached the owner / decision maker</li>
+        <li><span class="cb">✓</span>Verbal authorization captured: customer said YES on recording</li>
+        <li><span class="cb">✓</span>Speed, monthly price &amp; reward card amount disclosed</li>
+        <li><span class="cb">✓</span>Free install confirmed + reward card redemption (postcard) explained</li>
+        <li><span class="cb">✓</span>18+ present &amp; access disclosed for install</li>
+        <li><span class="cb">✓</span>Add-ons (Phone / Dynamic Defense) confirmed Yes or No</li>
+        <li><span class="cb">✓</span>EIN / Tax ID captured</li>
+        <li><span class="cb">✓</span>Email confirmed for Letter of Authorization</li>
+        <li><span class="cb">✓</span>LOA to be emailed; customer to sign and return</li>
+        <li><span class="cb">✓</span>All fields completed in the form panel</li>
+      </ul>
+    </section>
+
+    <!-- ===== PHASE 9: PRICING SHEET ===== -->
+    <section class="phase" data-phase="8">
+      <h2 class="phase-head">Pricing Reference Sheet</h2>
+      <div class="phase-sub">Phase 9 · Quick reference — approximate pricing (mid-2026)</div>
+
+      <div class="compliance"><b>JUNE PROMO = OFFICIAL (AT&amp;T internal, thru 6/30).</b> The reward cards, free install, and $750 ETF buyout below are confirmed AT&amp;T offers. The speed/price tables are typical reference — still verify the exact monthly price for the customer's address at <b>att.com/business</b> / AT&amp;T portal before quoting.</div>
+
+      <div class="tag say">Business Fiber — Standalone (approx /mo) + June Reward Card</div>
+      <table class="obj">
+        <thead><tr><th>Speed</th><th>Standard</th><th>With Wireless</th><th>Reward Card 💳</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>300 Mbps</td><td>~$70</td><td>~$40–50</td><td><b>$300</b></td><td>Small teams, e-commerce</td></tr>
+          <tr><td>500 Mbps</td><td>~$110</td><td>~$70</td><td><b>$400</b></td><td>More devices, cloud</td></tr>
+          <tr><td>1 Gig</td><td>~$160</td><td>~$110</td><td><b>$500</b></td><td>Heavy use · 5G backup</td></tr>
+          <tr><td>2 Gig</td><td>~$185</td><td>~$135</td><td><b>$500</b></td><td>High-volume · 5G backup</td></tr>
+          <tr><td>5 Gig</td><td>~$285</td><td>~$235</td><td><b>$500</b></td><td>Enterprise · 5G backup</td></tr>
+        </tbody>
+      </table>
+
+      <div class="tag say">Internet + Phone Bundles (approx /mo)</div>
+      <table class="obj">
+        <thead><tr><th>Bundle</th><th>Price</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Fiber 300 + Phone</td><td>~$85</td><td>1 line · +$50 reward card (online)</td></tr>
+          <tr><td>Fiber 500 + Phone</td><td>~$125</td><td>—</td></tr>
+          <tr><td>Fiber 1 Gig + Phone</td><td>~$175</td><td>Includes 5G backup</td></tr>
+          <tr><td>Phone for Business</td><td>$15/line</td><td>Up to 6 lines bundled · unlimited US/CA/MX</td></tr>
+        </tbody>
+      </table>
+
+      <div class="tag say">Dynamic Defense (security add-on, /mo)</div>
+      <table class="obj">
+        <thead><tr><th>Tier</th><th>Price</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Standard</td><td>$15 (sometimes $0 w/ promo)</td><td>Threat blocking, DNS protection</td></tr>
+          <tr><td>Advanced</td><td>$65</td><td>Firewall, geo/web filtering · often 2 mo free</td></tr>
+          <tr><td>Premium</td><td>$95</td><td>Antivirus, zero-day defense · often 2 mo free</td></tr>
+        </tbody>
+      </table>
+
+      <div class="qf">
+        <h3>🔥 JUNE PROMO (effective 6/4–6/30) — Speed-Based Reward Cards</h3>
+        <ul>
+          <li><b>NEW reward cards replace the old $300 offer — new customers only:</b></li>
+          <li>ABF <b>300M</b> → <b>$300</b> reward card</li>
+          <li>ABF <b>500M</b> → <b>$400</b> reward card</li>
+          <li>ABF <b>1G / 2G / 5G</b> → <b>$500</b> reward card</li>
+          <li><b>Position it as free months:</b> e.g. 1 Gig + $500 card = <b>~3 months free</b> (taxes/fees excluded)</li>
+          <li><b>$99 install fee WAIVED</b> across all speeds</li>
+          <li><b>Up to $750 ETF buyout</b> — removes switching barrier for customers under contract</li>
+          <li>Fiber <b>as low as $30/mo when converged</b> (with AT&amp;T Business Wireless)</li>
+          <li>⚠ Customer <b>MUST complete redemption</b> using the postcard mailed to their billing address — required to receive the reward card</li>
+        </ul>
+      </div>
+
+      <div class="warn">All prices exclude taxes &amp; fees. Promos auto-renew at regular rate unless canceled. Availability limited to fiber-served areas — verify the address.</div>
+    </section>
+
+    <!-- Phase nav buttons -->
+    <div class="phase-nav">
+      <button class="pbtn" id="prevBtn">← Previous</button>
+      <button class="pbtn" id="nextBtn">Next →</button>
     </div>
-  </div>
 
-  <!-- STEP 4 -->
-  <div class="step" id="s4">
-    <span class="num">STEP 4</span>
-    <h2>The offer — the hook</h2>
-    <p class="hint">Say it with energy. The reward card is the star.</p>
-    <div class="say">Here's what's on the table with <b>AT&amp;T Business Fiber</b> right now:
-      <b>faster speed</b>, usually a <b>lower bill</b> than you've got, <b>no contract</b>,
-      plus a <b>Visa reward card from $300 up to $500</b> just for switching, and
-      <b>free professional install</b>. If you're under contract elsewhere, AT&amp;T will
-      <b>buy it out up to $750</b>. You can also add <b>business phone lines at $15 each</b>.</div>
-    <div class="say">That reward card basically covers your <b>first few months of service</b>.
-      Honestly, there's no reason not to switch.</div>
-    <!-- URGENCY -->
-    <div class="say">And the reason I'm reaching you <b>now</b> instead of later — the promo and
-      the <b>reward card end June 30th</b>.</div>
-  </div>
+  </main>
 
-  <!-- STEP 5 COMPLIANCE -->
-  <div class="step" id="s5">
-    <span class="num">STEP 5</span>
-    <h2>Compliance — mandatory</h2>
-    <div class="comp"><span class="tag">MUST READ BEFORE CONTINUING</span>
-      "Before we go further, I need to let you know <b>this call is recorded for quality
-      and verification.</b>"</div>
-  </div>
+  <!-- ============ FORM PANEL ============ -->
+  <aside class="formpanel">
 
-  <!-- STEP 6 -->
-  <div class="step" id="s6">
-    <span class="num">STEP 6</span>
-    <h2>Soft close — assume the sale</h2>
-    <p class="hint">Don't ask "do you want it." Ask when. Then offer add-ons.</p>
-    <div class="ask">All I need is your <b>OK to get you set up</b> at that lower price with the
-      reward card. <b>What day works best</b> for the technician to come out?</div>
-    <div class="ask">Want me to add <b>Business Phone at $15/line</b>, or <b>Dynamic Defense</b>
-      internet security — starts at <b>$15/mo with 2 months free</b>?</div>
-    <div class="branches">
-      <div class="b yes"><span class="l">IF YES</span>Confirm the add-on, note it, continue to details.</div>
-      <div class="b no"><span class="l">IF NO</span>No problem — continue to details.</div>
+    <div id="formView">
+      <h2>📋 Customer Data — Winback</h2>
+      <div class="form-sub">Fill ALL required fields as you collect them on the call.</div>
+      <div class="form-warning">⚠ ALL fields with <span style="color:#ef4444">*</span> are REQUIRED. Do not submit with missing information.</div>
+
+      <form id="wbForm">
+
+        <div class="fgroup">
+          <h4>Agent Tracking</h4>
+          <div class="field"><label>Agent Name <span class="req">*</span></label><input name="agent_name" required></div>
+        </div>
+
+        <div class="fgroup">
+          <h4>Business Info</h4>
+          <div class="field"><label>Legal Business Name <span class="req">*</span></label><input name="business_name" required></div>
+          <div class="field"><label>Business Type <span class="req">*</span></label>
+            <select name="business_type" required>
+              <option value="">— Select —</option>
+              <option value="Corporation">Corporation</option>
+              <option value="LLC">LLC</option>
+              <option value="Sole Proprietor">Sole Proprietor</option>
+            </select>
+          </div>
+          <div class="field"><label>EIN / Tax ID <span class="req">*</span></label><input name="ein" required><div class="hint">Business tax ID — identifies the business in AT&T's system.</div></div>
+          <div class="field"><label>Full Service Address <span class="req">*</span></label><textarea name="service_address" required></textarea></div>
+        </div>
+
+        <div class="fgroup">
+          <h4>Contact</h4>
+          <div class="field"><label>Contact First Name <span class="req">*</span></label><input name="contact_first" required></div>
+          <div class="field"><label>Contact Last Name <span class="req">*</span></label><input name="contact_last" required></div>
+          <div class="field"><label>Business Phone <span class="req">*</span></label><input type="tel" name="business_phone" required></div>
+          <div class="field"><label>Best Number to Reach <span class="req">*</span></label><input type="tel" name="best_phone" required></div>
+          <div class="field"><label>Email (for Letter of Authorization) <span class="req">*</span></label><input type="email" name="email" required><div class="hint">Verify spelling carefully — LOA is sent here.</div></div>
+        </div>
+
+        <div class="fgroup">
+          <h4>Install Contact</h4>
+          <div class="field"><label>Secondary Contact Person (at install)</label><input name="secondary_contact"></div>
+          <div class="field"><label>Secondary Contact Phone (at install)</label><input type="tel" name="secondary_phone"></div>
+          <div class="field"><label>Best Time to Reach / Install <span class="req">*</span></label><input name="best_time" required></div>
+        </div>
+
+        <div class="fgroup">
+          <h4>Plan &amp; Add-Ons</h4>
+          <div class="field"><label>Speed Sold <span class="req">*</span></label>
+            <select name="speed" required>
+              <option value="">— Select —</option>
+              <option value="300M">300 Mbps (~$70) — $300 card</option>
+              <option value="500M">500 Mbps (~$110) — $400 card</option>
+              <option value="1Gig">1 Gig (~$160) — $500 card</option>
+              <option value="2Gig">2 Gig (~$185) — $500 card</option>
+              <option value="5Gig">5 Gig (~$285) — $500 card</option>
+            </select>
+          </div>
+          <div class="field"><label>Monthly Price ($/mo) <span class="req">*</span></label><input name="monthly_price" required><div class="hint">Enter the confirmed AT&T price for the speed sold.</div></div>
+          <div class="field"><label>Reward Card <span class="req">*</span></label>
+            <select name="reward_card" required>
+              <option value="">— Select —</option>
+              <option value="$300">$300 (300M)</option>
+              <option value="$400">$400 (500M)</option>
+              <option value="$500">$500 (1G/2G/5G)</option>
+            </select>
+          </div>
+          <div class="field"><label>Phone for Business <span class="req">*</span></label>
+            <div class="radio-row">
+              <label><input type="radio" name="phone_service" value="No" checked required> No</label>
+              <label><input type="radio" name="phone_service" value="Yes ($15/line)"> Yes ($15/line)</label>
+            </div>
+          </div>
+          <div class="field"><label>Dynamic Defense <span class="req">*</span></label>
+            <div class="radio-row">
+              <label><input type="radio" name="dynamic_defense" value="No" checked required> No</label>
+              <label><input type="radio" name="dynamic_defense" value="Yes ($15/mo, 2 mo free)"> Yes ($15/mo)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <h4>Notes</h4>
+          <div class="field"><label>Agent Notes</label><textarea name="notes" placeholder="Anything supervisor should know..."></textarea></div>
+        </div>
+
+        <div class="form-warning">⚠ Order is NOT final until the signed Letter of Authorization is returned. Confirm the email address out loud before ending the call.</div>
+
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Submit to Google Sheets</button>
+          <button type="reset" class="btn btn-secondary">Clear</button>
+        </div>
+      </form>
     </div>
-  </div>
 
-  <!-- STEP 7 -->
-  <div class="step" id="s7">
-    <span class="num">STEP 7</span>
-    <h2>Capture the details</h2>
-    <p class="hint">Read back each one to confirm spelling. Especially the email.</p>
-    <ul class="check">
-      <li>Business legal name</li>
-      <li>Contact name + title</li>
-      <li>Service address (must be fiber-served — verify)</li>
-      <li>Best callback number</li>
-      <li>Email (read it back letter by letter)</li>
-      <li>Current provider + monthly bill</li>
-      <li>Speed chosen + add-ons</li>
-    </ul>
-  </div>
-
-  <!-- STEP 8 -->
-  <div class="step" id="s8">
-    <span class="num">STEP 8</span>
-    <h2>Recap, disclosure &amp; close</h2>
-    <p class="hint">Read clearly — do not rush this part.</p>
-    <div class="say">Let me recap: you're getting <b>AT&amp;T Business Fiber [SPEED]</b> at
-      <b>$[PRICE]/mo</b>, a <b>$[CARD] reward card</b>, <b>free install</b>, and <b>no contract</b>.</div>
-    <div class="comp"><span class="tag">REWARD CARD DISCLOSURE — REQUIRED</span>
-      "Important: you'll get a <b>postcard mailed to your billing address</b>. You
-      <b>must complete the redemption with it</b> to receive the reward card — it arrives a few
-      weeks after activation."</div>
-    <div class="say">The technician will confirm any extra wiring <b>before</b> starting — no
-      surprises. Someone <b>18 or older</b> must be on site with access to where the service goes in.</div>
-    <div class="ask">Last step — I'll <b>email you a Letter of Authorization</b>. Please
-      <b>sign it and email it back</b> so we can lock in your order and your reward card.</div>
-    <div class="say">Welcome to AT&amp;T Business, and thank you for your time today. Have a great one!</div>
-  </div>
-
-  <!-- REBUTTALS -->
-  <div class="reb" id="reb">
-    <h2>🔁 Rebuttals — handle, don't argue</h2>
-
-    <div class="q">"I'm not interested."</div>
-    <div class="a">"Totally understand — most people say that before they hear the number. All I'm
-      really offering is a lower bill and up to $500 back. Worth 30 seconds?"</div>
-
-    <div class="q">"I already have internet."</div>
-    <div class="a">"Perfect — that's exactly who this is for. Who are you with and what are you paying?
-      If I can't beat it, I'll tell you straight."</div>
-
-    <div class="q">"I'm happy with my provider."</div>
-    <div class="a">"Glad it's working. The difference here is the $300–$500 reward card and no contract —
-      even happy customers don't leave money on the table. Want me to check your address?"</div>
-
-    <div class="q">"How much is it?"</div>
-    <div class="a">"Depends on the speed, but most businesses land lower than they pay now — and the
-      reward card covers your first few months. What are you paying today so I can compare?"</div>
-
-    <div class="q">"Send me information / email me."</div>
-    <div class="a">"Happy to — but the reward card ends June 30th, so let me check your address live
-      and at least lock the offer. Takes one minute. What's the business address?"</div>
-
-    <div class="q">"I don't have time."</div>
-    <div class="a">"I hear you — one minute now could save you a few hundred a year. When's a better
-      time today, this afternoon or tomorrow morning?"</div>
-
-    <div class="q">"Is this a contract?"</div>
-    <div class="a">"No contract at all. And if you're locked in elsewhere, AT&amp;T buys it out up to $750."</div>
-  </div>
-
-  <!-- PRICING -->
-  <div class="reb price" id="price">
-    <h2>💲 Pricing reference (verify exact price at the address)</h2>
-    <table>
-      <tr><th>Speed</th><th>Standard /mo</th><th>w/ Wireless</th><th>Reward Card</th></tr>
-      <tr><td><b>300 Mbps</b></td><td>~$70</td><td>~$40–50</td><td class="card">$300</td></tr>
-      <tr><td><b>500 Mbps</b></td><td>~$110</td><td>~$70</td><td class="card">$400</td></tr>
-      <tr><td><b>1 Gig</b></td><td>~$160</td><td>~$110</td><td class="card">$500</td></tr>
-      <tr><td><b>2 Gig</b></td><td>~$185</td><td>~$135</td><td class="card">$500</td></tr>
-      <tr><td><b>5 Gig</b></td><td>~$285</td><td>~$235</td><td class="card">$500</td></tr>
-    </table>
-    <ul class="check" style="margin-top:6px">
-      <li><b>$99 install fee WAIVED</b> all speeds</li>
-      <li><b>Up to $750 ETF buyout</b> if under contract elsewhere</li>
-      <li><b>Business Phone:</b> $15/line · unlimited US/CA/MX · up to 6 lines</li>
-      <li><b>Dynamic Defense:</b> $15/mo (often 2 months free)</li>
-      <li><b>Fiber as low as $30/mo</b> when converged with AT&amp;T Business Wireless</li>
-    </ul>
-    <div class="rule" style="margin-top:12px">
-      ⚠ <b>Always verify</b> the exact monthly price and fiber availability at the customer's
-      address before quoting. Prices exclude taxes &amp; fees. Promo thru <b>June 30</b>.
-      Customer <b>must redeem the reward card via the mailed postcard.</b>
+    <div class="success-screen" id="successView">
+      <div class="check">✓</div>
+      <h3>Submitted!</h3>
+      <p>Data sent to Google Sheets · Winback tab.</p>
+      <button class="btn btn-primary" onclick="resetForm()">Submit Another</button>
     </div>
-  </div>
+
+  </aside>
 
 </div>
+
+<script>
+/* ============ CONFIG ============ */
+// Same Apps Script Web App backend as the DD form. The "product" field below
+// ("AT&T Winback") tells the Apps Script which tab to write to.
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYfvW6_R6F7zbx4YuzoSuf6IOfjAvfRJ81aZQqO_egwmmgmuYdtmKWTcSzOv5Lbovu/exec";
+
+/* ============ PHASE NAVIGATION ============ */
+const phases = document.querySelectorAll('.phase');
+const navItems = document.querySelectorAll('.nav-item');
+let currentPhase = 1;
+
+function goToPhase(p){
+  currentPhase = p;
+  phases.forEach(ph => ph.classList.toggle('active', ph.dataset.phase == p));
+  navItems.forEach(n => n.classList.toggle('active', n.dataset.phase == p));
+  document.querySelector('.script').scrollTop = 0;
+  document.getElementById('prevBtn').disabled = (p == 1);
+  document.getElementById('nextBtn').disabled = (p == 9);
+}
+
+navItems.forEach(n => n.addEventListener('click', () => goToPhase(n.dataset.phase)));
+document.getElementById('prevBtn').addEventListener('click', () => { if(currentPhase > 1) goToPhase(currentPhase - 1); });
+document.getElementById('nextBtn').addEventListener('click', () => { if(currentPhase < 9) goToPhase(parseInt(currentPhase) + 1); });
+
+/* ============ CHECKLIST ============ */
+document.querySelectorAll('#checklist li').forEach(li => {
+  li.addEventListener('click', () => li.classList.toggle('checked'));
+});
+
+/* ============ FORM SUBMIT ============ */
+const form = document.getElementById('wbForm');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const fd = new FormData(form);
+  const data = Object.fromEntries(fd.entries());
+  data.submitted_at = new Date().toISOString();
+  data.product = "AT&T Winback";
+
+  if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    alert("⚠ APPS_SCRIPT_URL not configured.\n\nEdit the HTML file and paste your Apps Script Web App URL into the APPS_SCRIPT_URL constant near the bottom of the file.\n\nForm data captured (test mode):\n\n" + JSON.stringify(data, null, 2));
+    return;
+  }
+
+  submitBtn.textContent = "Submitting...";
+  submitBtn.disabled = true;
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data)
+    });
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').classList.add('active');
+  } catch (err) {
+    alert("Error submitting: " + err.message);
+    submitBtn.textContent = "Submit to Google Sheets";
+    submitBtn.disabled = false;
+  }
+});
+
+function resetForm(){
+  form.reset();
+  document.getElementById('formView').style.display = 'block';
+  document.getElementById('successView').classList.remove('active');
+  submitBtn.textContent = "Submit to Google Sheets";
+  submitBtn.disabled = false;
+}
+
+/* ============ THEME TOGGLE ============ */
+const themeToggle = document.getElementById('themeToggle');
+const themeIco = document.getElementById('themeIco');
+const themeLbl = document.getElementById('themeLbl');
+const themePill = document.getElementById('themePill');
+
+function applyTheme(mode){
+  document.documentElement.setAttribute('data-theme', mode);
+  if (mode === 'light') {
+    themeIco.textContent = '☀️';
+    themeLbl.textContent = 'Light Mode';
+    themePill.textContent = 'LIGHT';
+  } else {
+    themeIco.textContent = '🌙';
+    themeLbl.textContent = 'Dark Mode';
+    themePill.textContent = 'DARK';
+  }
+  try { localStorage.setItem('wb_theme', mode); } catch(e) {}
+}
+
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+// Load saved preference on page load (default: dark)
+let savedTheme = 'dark';
+try { savedTheme = localStorage.getItem('wb_theme') || 'dark'; } catch(e) {}
+applyTheme(savedTheme);
+
+/* Init */
+goToPhase(1);
+</script>
+
 </body>
 </html>
